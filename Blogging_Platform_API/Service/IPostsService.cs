@@ -5,10 +5,10 @@ namespace Blogging_Platform_API.Service
 {
     public interface IPostsService
     {
-        List<PostsDto> GetPosts(string? search = null, int page = 1, int limit = 10);
-        PostsDto SavePosts(BlogPost blogPost);
-        PostsDto UpdatePosts(string id, BlogPost blogPost);
-        bool DeletePosts(string id);
-        PostsDto GetPost(string id);
+        Task<List<PostsDto>> GetPostsAsync(string? search = null, int page = 1, int limit = 10);
+        Task<PostsDto> SavePostAsync(BlogPost blogPost);
+        Task<PostsDto> UpdatePostAsync(string id, BlogPost blogPost);
+        Task DeletePostAsync(string id);
+        Task<PostsDto> GetPostAsync(string id);
     }
 }

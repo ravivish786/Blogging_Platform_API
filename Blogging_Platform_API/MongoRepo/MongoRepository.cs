@@ -15,22 +15,19 @@ namespace Blogging_Platform_API.MongoRepo
             _collection = database.GetCollection<T>(collectionName);
         }
 
-        public List<T> Get() =>
-            _collection.Find(_ => true).ToList();
+        public async Task<List<T>> GetAsync() =>
+            await _collection.Find(_ => true).ToListAsync();
 
-        public T Get(string id) =>
-            _collection.Find(Builders<T>.Filter.Eq("Id", id)).FirstOrDefault();
+        public async Task<T?> GetAsync(string id) =>
+            await _collection.Find(Builders<T>.Filter.Eq("Id", id)).FirstOrDefaultAsync();
 
-        public T Create(T entity)
+        public async Task<T> CreateAsync(T entity)
         {
-            _collection.InsertOne(entity);
+            await _collection.InsertOneAsync(entity);
             return entity;
         }
 
-        //public void Update(string id, T entity) =>
-        //    _collection.ReplaceOne(Builders<T>.Filter.Eq("Id", id), entity);
-
-        public void Update(string id, T entity)
+        public async Task UpdateAsync(string id, T entity)
         {
             // Ensure the entity's Id matches the existing document
             var property = typeof(T).GetProperty("Id");
@@ -39,14 +36,13 @@ namespace Blogging_Platform_API.MongoRepo
                 property.SetValue(entity, id); // assign Id from route
             }
 
-            _collection.ReplaceOne(
+            await _collection.ReplaceOneAsync(
                 Builders<T>.Filter.Eq("Id", id),
                 entity
             );
         }
 
-
-        public void Remove(string id) =>
-            _collection.DeleteOne(Builders<T>.Filter.Eq("Id", id));
+        public async Task RemoveAsync(string id) =>
+            await _collection.DeleteOneAsync(Builders<T>.Filter.Eq("Id", id));
     }
 }

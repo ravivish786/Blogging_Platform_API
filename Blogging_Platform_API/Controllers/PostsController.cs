@@ -19,23 +19,23 @@ namespace Blogging_Platform_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPosts([FromQuery] string? search = null, [FromQuery] int page = 1, [FromQuery] int limit = 10)
+        public async Task<IActionResult> GetPosts([FromQuery] string? search = null, [FromQuery] int page = 1, [FromQuery] int limit = 10)
         {
             // Example result (replace with DB logic)
             var posts = new
             {
                 Search = search,
                 Paging = new { Page = page, Limit = limit },
-                Data = postsService.GetPosts(search, page, limit)
+                Data = await postsService.GetPostsAsync(search, page, limit)
             };
 
             return Ok(posts);
         }
 
         [HttpGet("{id}", Name = "GetPostById")]
-        public IActionResult GetPostById([FromRoute] string id)
+        public async Task<IActionResult> GetPostById([FromRoute] string id)
         {
-            var post = postsService.GetPost(id);
+            var post = await postsService.GetPostAsync(id);
 
             if (post == null)
             {
@@ -46,9 +46,9 @@ namespace Blogging_Platform_API.Controllers
         }   
 
         [HttpPost]
-        public IActionResult PostPosts([FromBody] BlogPost blogPost)
+        public async Task<IActionResult> PostPosts([FromBody] BlogPost blogPost)
         {
-            var result =  postsService.SavePosts(blogPost);
+            var result = await postsService.SavePostAsync(blogPost);
 
             // Return 201 Created + Location header
             return CreatedAtAction(
@@ -59,9 +59,9 @@ namespace Blogging_Platform_API.Controllers
         }
 
         [HttpPut("{id}", Name = "UpdatePost")]
-        public IActionResult UpdatePost(string id,  [FromBody] BlogPost post)
+        public async Task<IActionResult> UpdatePost(string id,  [FromBody] BlogPost post)
         {
-            var response = postsService.GetPost(id);
+            var response = await postsService.GetPostAsync(id);
 
             if (response == null)
             {
@@ -70,22 +70,22 @@ namespace Blogging_Platform_API.Controllers
             post.CreatedAt = response.CreatedAt;
             post.UpdatedAt = DateTime.UtcNow;
 
-            var result = postsService.UpdatePosts(id, post);
+            var result = await postsService.UpdatePostAsync(id, post);
 
             return Ok(result);
         }
 
         [HttpDelete("{id}", Name = "DeletePost")]
-        public IActionResult DeletePost(string id)
+        public async Task<IActionResult> DeletePost(string id)
         {
-            var data = postsService.GetPost(id);
+            var data = postsService.GetPostAsync(id);
 
             if (data == null)
             {
                 return NotFound();
             }
 
-            _ = postsService.DeletePosts(id);
+            await postsService.DeletePostAsync(id);
             return NoContent();
         }
 

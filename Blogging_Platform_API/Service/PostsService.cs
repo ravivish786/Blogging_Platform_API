@@ -16,15 +16,14 @@ namespace Blogging_Platform_API.Service
             _postsRepo = postsRepo;
         }
 
-        public bool DeletePosts(string id)
+        public async Task DeletePostAsync(string id)
         {
-            _postsRepo.Remove(id);
-            return true;
+            await _postsRepo.RemoveAsync(id);
         }
 
-        public PostsDto GetPost(string id)
+        public async Task<PostsDto> GetPostAsync(string id)
         {
-            var data = _postsRepo.Get(id);
+            var data = await _postsRepo.GetAsync(id);
 
             if (data == null)
             {
@@ -34,9 +33,9 @@ namespace Blogging_Platform_API.Service
             return PostMapper.ToDto(data);
         }
  
-        public List<PostsDto> GetPosts(string? search = null, int page = 1, int limit = 10)
+        public async Task<List<PostsDto>> GetPostsAsync(string? search = null, int page = 1, int limit = 10)
         {
-            var data = _postsRepo.Get();
+            var data = await _postsRepo.GetAsync();
 
             if (data == null)
             {
@@ -46,7 +45,7 @@ namespace Blogging_Platform_API.Service
             return PostMapper.ToDtoList(data);
         }
 
-        public PostsDto SavePosts(BlogPost blogPost)
+        public async Task<PostsDto> SavePostAsync(BlogPost blogPost)
         {
 
             // Generate ObjectId if not provided
@@ -55,14 +54,14 @@ namespace Blogging_Platform_API.Service
                 blogPost.Id = ObjectId.GenerateNewId().ToString();
             }
 
-            var data = _postsRepo.Create(blogPost);
+            var data = await _postsRepo.CreateAsync(blogPost);
 
             return PostMapper.ToDto(data);
         }
 
-        public PostsDto UpdatePosts(string id, BlogPost blogPost)
+        public async Task<PostsDto> UpdatePostAsync(string id, BlogPost blogPost)
         {
-            _postsRepo.Update(id, blogPost);
+            await _postsRepo.UpdateAsync(id, blogPost);
             return PostMapper.ToDto(blogPost);
         }
     }
