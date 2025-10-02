@@ -7,7 +7,7 @@ namespace Blogging_Platform_API.DTO
     {
 
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
@@ -25,7 +25,7 @@ namespace Blogging_Platform_API.DTO
         public DateTime CreatedAt { get; set; }
 
         [JsonPropertyName("updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
     }
 }

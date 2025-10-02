@@ -32,8 +32,8 @@ namespace Blogging_Platform_API.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("{id:int}", Name = "GetPostById")]
-        public IActionResult GetPostById([FromRoute] int id)
+        [HttpGet("{id}", Name = "GetPostById")]
+        public IActionResult GetPostById([FromRoute] string id)
         {
             var post = postsService.GetPost(id);
 
@@ -58,8 +58,8 @@ namespace Blogging_Platform_API.Controllers
             );
         }
 
-        [HttpPut("{id:int}", Name = "UpdatePost")]
-        public IActionResult UpdatePost(int id,  [FromBody] BlogPost post)
+        [HttpPut("{id}", Name = "UpdatePost")]
+        public IActionResult UpdatePost(string id,  [FromBody] BlogPost post)
         {
             var response = postsService.GetPost(id);
 
@@ -67,14 +67,16 @@ namespace Blogging_Platform_API.Controllers
             {
                 return NotFound();
             }
+            post.CreatedAt = response.CreatedAt;
+            post.UpdatedAt = DateTime.UtcNow;
 
             var result = postsService.UpdatePosts(id, post);
 
             return Ok(result);
         }
 
-        [HttpDelete("{id:int}", Name = "DeletePost")]
-        public IActionResult DeletePost(int id)
+        [HttpDelete("{id}", Name = "DeletePost")]
+        public IActionResult DeletePost(string id)
         {
             var data = postsService.GetPost(id);
 
@@ -83,7 +85,7 @@ namespace Blogging_Platform_API.Controllers
                 return NotFound();
             }
 
-            var result = postsService.DeletePosts(id);
+            _ = postsService.DeletePosts(id);
             return NoContent();
         }
 

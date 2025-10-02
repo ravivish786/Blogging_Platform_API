@@ -6,9 +6,9 @@ namespace Blogging_Platform_API.Models
 {
     public class BlogPost
     {
-        [BsonId] // MongoDB document Id
-        //[BsonRepresentation(BsonType.ObjectId)]
-        public int Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; } = null; 
 
         [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
@@ -24,7 +24,7 @@ namespace Blogging_Platform_API.Models
 
 
         [JsonPropertyName("createdAt")]
-        public DateTime? CreatedAt { get; set; } = null;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [JsonPropertyName("updatedAt")]
         public DateTime? UpdatedAt { get; set; } = null;

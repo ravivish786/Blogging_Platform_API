@@ -2,6 +2,8 @@
 using Blogging_Platform_API.Helper;
 using Blogging_Platform_API.Models;
 using Blogging_Platform_API.MongoRepo;
+using MongoDB.Bson;
+using SharpCompress.Common;
 
 namespace Blogging_Platform_API.Service
 {
@@ -14,15 +16,15 @@ namespace Blogging_Platform_API.Service
             _postsRepo = postsRepo;
         }
 
-        public bool DeletePosts(int id)
+        public bool DeletePosts(string id)
         {
-            _postsRepo.Remove(id.ToString());
+            _postsRepo.Remove(id);
             return true;
         }
 
-        public PostsDto GetPost(int id)
+        public PostsDto GetPost(string id)
         {
-            var data = _postsRepo.Get(id.ToString());
+            var data = _postsRepo.Get(id);
 
             if (data == null)
             {
@@ -31,14 +33,7 @@ namespace Blogging_Platform_API.Service
 
             return PostMapper.ToDto(data);
         }
-
-        /// <summary>
-        /// Get posts with optional search and paging.
-        /// </summary>
-        /// <param name="search">Search keyword</param>
-        /// <param name="page">Page number (default = 1)</param>
-        /// <param name="limit">Page size (default = 10)</param>
-        /// <returns>List of posts</returns>
+ 
         public List<PostsDto> GetPosts(string? search = null, int page = 1, int limit = 10)
         {
             var data = _postsRepo.Get();
@@ -53,13 +48,21 @@ namespace Blogging_Platform_API.Service
 
         public PostsDto SavePosts(BlogPost blogPost)
         {
+
+            // Generate ObjectId if not provided
+            if (string.IsNullOrEmpty(blogPost.Id))
+            {
+                blogPost.Id = ObjectId.GenerateNewId().ToString();
+            }
+
             var data = _postsRepo.Create(blogPost);
+
             return PostMapper.ToDto(data);
         }
 
-        public PostsDto UpdatePosts(int id, BlogPost blogPost)
+        public PostsDto UpdatePosts(string id, BlogPost blogPost)
         {
-            _postsRepo.Update(id.ToString(), blogPost);
+            _postsRepo.Update(id, blogPost);
             return PostMapper.ToDto(blogPost);
         }
     }

@@ -7,8 +7,8 @@ namespace Blogging_Platform_API.Service
     {
         List<PostsDto> GetPosts(string? search = null, int page = 1, int limit = 10);
         PostsDto SavePosts(BlogPost blogPost);
-        PostsDto UpdatePosts(int id, BlogPost blogPost);
-        bool DeletePosts(int id);
-        PostsDto GetPost(int id);
+        PostsDto UpdatePosts(string id, BlogPost blogPost);
+        bool DeletePosts(string id);
+        PostsDto GetPost(string id);
     }
 }
