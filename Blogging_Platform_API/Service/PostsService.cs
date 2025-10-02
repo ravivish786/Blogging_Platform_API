@@ -3,7 +3,6 @@ using Blogging_Platform_API.Helper;
 using Blogging_Platform_API.Models;
 using Blogging_Platform_API.MongoRepo;
 using MongoDB.Bson;
-using SharpCompress.Common;
 
 namespace Blogging_Platform_API.Service
 {
@@ -53,7 +52,7 @@ namespace Blogging_Platform_API.Service
             {
                 blogPost.Id = ObjectId.GenerateNewId().ToString();
             }
-
+            blogPost.CreatedAt = DateTime.UtcNow;
             var data = await _postsRepo.CreateAsync(blogPost);
 
             return PostMapper.ToDto(data);
