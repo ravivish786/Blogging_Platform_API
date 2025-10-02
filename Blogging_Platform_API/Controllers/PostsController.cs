@@ -76,8 +76,15 @@ namespace Blogging_Platform_API.Controllers
         [HttpDelete("{id:int}", Name = "DeletePost")]
         public IActionResult DeletePost(int id)
         {
+            var data = postsService.GetPost(id);
+
+            if (data == null)
+            {
+                return NotFound();
+            }
+
             var result = postsService.DeletePosts(id);
-            return Ok(result);
+            return NoContent();
         }
 
     }

@@ -7,7 +7,8 @@ namespace Blogging_Platform_API.Models
     public class BlogPost
     {
         [BsonId] // MongoDB document Id
-        [BsonRepresentation(BsonType.ObjectId)]
+        //[BsonRepresentation(BsonType.ObjectId)]
+        public int Id { get; set; }
 
         [JsonPropertyName("title")]
         public string Title { get; set; } = null!;
